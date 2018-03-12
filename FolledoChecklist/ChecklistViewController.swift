@@ -170,5 +170,28 @@ class ChecklistViewController: UITableViewController {
         label.text = item.text
     }
     
+//addItem
+    @IBAction func addItem() { //p.199
+        let newRowIndex = items.count //p.200 calculate what the index of the new row in your array should be. This is encessary in orde to properly update yourself
+        
+        let item = ChecklistItem() //creates a new checklist item and adds it to the end of the array
+        item.text = "I am a new row -Kobe"
+        item.checked = false
+        items.append(item)
+        
+        let indexPath = IndexPath(row: newRowIndex, section: 0) //p.200 you put the index for the new row in the local constant newRowForIndex which won't change. p.200 Also have to tell the table view about this new row so it can add a new cell for that row. Table views uses index-paths to indentify rows, so first you make an IndexPath object that points to the new row, using the row number from the newRowIndex var
+        let indexPaths = [indexPath] //p.200 creates a new temporary array holding just one of the index-path item
+        tableView.insertRows(at: indexPaths, with: .automatic) //p.201 inserRows tells table view about the new row. This metho dactually let you insert multiple rows at the same time
+    }
+
+//commitEditingStyle
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) { //p.202
+        
+        items.remove(at: indexPath.row) //p.202 remove the item from the data model
+        
+        let indexPaths = [indexPath] //p.202 delte the corresponding row from the table view
+        tableView.deleteRows(at: indexPaths, with: .automatic)
+    }
+
 }
 

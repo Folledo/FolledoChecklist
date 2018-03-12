@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="R3L-z6-mHx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="U9W-ma-2Zu">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--KobeChecklstVC-->
+        <!--KobeChecklistVC-->
         <scene sceneID="kl9-oS-6Ul">
             <objects>
-                <tableViewController title="KobeChecklstVC" id="R3L-z6-mHx" customClass="ChecklistViewController" customModule="FolledoChecklist" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="KobeChecklstVC" id="R3L-z6-mHx" userLabel="KobeChecklistVC" customClass="ChecklistViewController" customModule="FolledoChecklist" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="OUD-Qc-EhW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -41,10 +41,35 @@
                             <outlet property="delegate" destination="R3L-z6-mHx" id="Lub-wf-CVW"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Checklists" id="cur-NO-MsE">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="SUV-tX-EOH">
+                            <connections>
+                                <action selector="addItem" destination="R3L-z6-mHx" id="0AZ-np-8kc"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="flw-Tt-5gu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-111.59420289855073" y="39.945652173913047"/>
+            <point key="canvasLocation" x="195.6521739130435" y="39.945652173913047"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="OPJ-JL-lcT">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="U9W-ma-2Zu" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="vsI-xo-v5Q">
+                        <rect key="frame" x="0.0" y="20" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="R3L-z6-mHx" kind="relationship" relationship="rootViewController" id="iEn-lc-Dea"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1yP-ub-E0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-600" y="40"/>
         </scene>
     </scenes>
 </document>
