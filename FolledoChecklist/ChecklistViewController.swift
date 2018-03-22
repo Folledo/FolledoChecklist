@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChecklistViewController: UITableViewController {
+class ChecklistViewController: UITableViewController, AddItemViewControllerDelegate { //p.235 ChecklistVC now promises to do the things from AddItemViewControllerDelegate protocol
 
     
     var items = [ChecklistItem]()//this declares that items will hold an array of ChecklistItem objects but it does not actually create that array. At this point, items does not have a value yet
@@ -136,7 +136,7 @@ class ChecklistViewController: UITableViewController {
     //func configureCheckmark(for cell: UITableViewCell, at indexPath: IndexPath) { //this method looks at the cell for a certain row, specified by indexPath, and makes the checkmark visible if the corresponding "row checked" variable is true, or hides the checkmark if the var is false
         
         //Does not need "let item = items[indexPath.row]" as instead of indexPath, you now directly pass it the ChecklistItem object
-        if item.checked { //p/192
+        if item.checked { //p/1921
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
@@ -170,7 +170,7 @@ class ChecklistViewController: UITableViewController {
         label.text = item.text
     }
     
-//addItem
+/* addItem gets removed after p.238 when we created a delegate protocol that lets us customize what we add
     @IBAction func addItem() { //p.199
         let newRowIndex = items.count //p.200 calculate what the index of the new row in your array should be. This is encessary in orde to properly update yourself
         
@@ -183,6 +183,7 @@ class ChecklistViewController: UITableViewController {
         let indexPaths = [indexPath] //p.200 creates a new temporary array holding just one of the index-path item
         tableView.insertRows(at: indexPaths, with: .automatic) //p.201 inserRows tells table view about the new row. This metho dactually let you insert multiple rows at the same time
     }
+ */
 
 //commitEditingStyle
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) { //p.202
@@ -190,7 +191,33 @@ class ChecklistViewController: UITableViewController {
         items.remove(at: indexPath.row) //p.202 remove the item from the data model
         
         let indexPaths = [indexPath] //p.202 delte the corresponding row from the table view
-        tableView.deleteRows(at: indexPaths, with: .automatic)
+        tableView.deleteRows(at: indexPaths, with: .automatic) //deleteRows function
+    }
+    
+//cancel func protocol from delegate protocol, AddItemViewControllerDelegate p.235
+    func addItemViewControllerDidCancel(_ controller: AddItemViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+//func protocol from delegate protocol, AddItemViewControllerDelegate p.235
+    func addItemViewController(_ controller: AddItemViewController, didFinishAdding item: ChecklistItem) {
+        
+        let newRowIndex = items.count //p.238 end of the array
+        items.append(item) //p.238 add it to array items
+        
+        let indexPath = IndexPath(row: newRowIndex, section: 0) //p.238
+        let indexPaths = [indexPath] //p.238
+        tableView.insertRows(at: indexPaths, with: .automatic) //p.238 (at: [IndexPath], with: UITableViewRowAnnimation)
+        
+        dismiss(animated: true, completion: nil) //p.235
+    }//let me delete the older previous addItem function
+    
+//prepare-for-segue p.236
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddItem" { //p.237 #1 There may be more than one segue per VC, so I gave this one a unique identifier and to check for that identifier first to make sure that we are handling the correct segue REMEMBER TO CHANGE THE IDENTIFIER OF THE SEGUE TO "AddItem"
+            let navigationController = segue.destination as! UINavigationController //p.237 #2 new view controller can be found in segue.destination. The storyboard shoes that the segue does not go directly to AddItemViewController but to the navigation controller that embeds it. So first you get ahold of this UINagivationController object
+            let controller = navigationController.topViewController as!  AddItemViewController //p.237 #3 To find the AddItemViewController, you can look at the navigation controller's topViewController property. This property refers to the screen that is currently active inside the navigation controller
+            controller.delegate = self //p.237 #4 Once you have a reference to the AddItemViewController object, you set its delegate property to self and the connection is complete. This tells the AddItemViewController that from now on, the object known as self is its delegate, (self here is ChecklistViewController.swift)
+        }
     }
 
 }
