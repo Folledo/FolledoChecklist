@@ -133,14 +133,24 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
     
 //configureCheckmark
     func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {// p.192
+        
+        //p.242
+        let label = cell.viewWithTag(1001) as! UILabel //p.242 check label's tag
+        if item.checked {
+            label.text = "✔️"
+        } else {
+            label.text = ""
+        }
+        
     //func configureCheckmark(for cell: UITableViewCell, at indexPath: IndexPath) { //this method looks at the cell for a certain row, specified by indexPath, and makes the checkmark visible if the corresponding "row checked" variable is true, or hides the checkmark if the var is false
         
-        //Does not need "let item = items[indexPath.row]" as instead of indexPath, you now directly pass it the ChecklistItem object
-        if item.checked { //p/1921
+        //removed in page 242
+        /*Does not need "let item = items[indexPath.row]" as instead of indexPath, you now directly pass it the ChecklistItem object
+        if item.checked { //p/192
             cell.accessoryType = .checkmark
         } else {
             cell.accessoryType = .none
-        }
+        }*/
         
 /*      var isChecked = false
         
@@ -186,11 +196,11 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
  */
 
 //commitEditingStyle
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) { //p.202
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) { //p.202 that enables swipe-to-delete
         
         items.remove(at: indexPath.row) //p.202 remove the item from the data model
         
-        let indexPaths = [indexPath] //p.202 delte the corresponding row from the table view
+        let indexPaths = [indexPath] //p.202 delete the corresponding row from the table view
         tableView.deleteRows(at: indexPaths, with: .automatic) //deleteRows function
     }
     
@@ -210,6 +220,17 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
         
         dismiss(animated: true, completion: nil) //p.235
     }//let me delete the older previous addItem function
+//func protocol for Editing p.250
+    func addItemViewController(_ controller: AddItemViewController, didFinishEditing item: ChecklistItem) { //p.250
+        
+        if let index = items.index(of: item) {  //p.250
+            let indexPath = IndexPath(row: index, section: 0) //p.250
+            if let cell = tableView.cellForRow(at: indexPath) { //p.250
+                configureText(for: cell, with: item) //p.250
+            } //p.250
+        } //p.250
+        dismiss(animated: true, completion: nil) //p.250
+    }
     
 //prepare-for-segue p.236
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -217,6 +238,15 @@ class ChecklistViewController: UITableViewController, AddItemViewControllerDeleg
             let navigationController = segue.destination as! UINavigationController //p.237 #2 new view controller can be found in segue.destination. The storyboard shoes that the segue does not go directly to AddItemViewController but to the navigation controller that embeds it. So first you get ahold of this UINagivationController object
             let controller = navigationController.topViewController as!  AddItemViewController //p.237 #3 To find the AddItemViewController, you can look at the navigation controller's topViewController property. This property refers to the screen that is currently active inside the navigation controller
             controller.delegate = self //p.237 #4 Once you have a reference to the AddItemViewController object, you set its delegate property to self and the connection is complete. This tells the AddItemViewController that from now on, the object known as self is its delegate, (self here is ChecklistViewController.swift)
+        }
+        else if segue.identifier == "EditItem" { //p.246
+            let navigationController = segue.destination as! UINavigationController //p.246 same as the AddItem
+            let controller = navigationController.topViewController as!  AddItemViewController //p.246 you get the navigation controller from the storyboard, and its embedded AddItemViewController using the topViewController property
+            controller.delegate = self //p.246 and set the view controller's delegate property so data notified when use taps Cancel or Done
+            
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) { //p.246 
+                controller.itemToEdit = items[indexPath.row]
+            }
         }
     }
 

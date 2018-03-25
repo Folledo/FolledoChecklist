@@ -8,11 +8,14 @@
 
 import Foundation
 
-class ChecklistItem { //p.183
+class ChecklistItem: NSObject { //p.183 //p.251 Added NSObject basic building block of almost all objects in Objective-C
     var text = ""
     var checked = false
     
     func toggleChecked() { //p.193
         checked = !checked
     }
+    
+    
+    
 }
