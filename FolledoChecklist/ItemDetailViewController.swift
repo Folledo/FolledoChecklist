@@ -1,5 +1,5 @@
 //
-//  AddItemViewController.swift
+//  ItemDetailViewController.swift
 //  FolledoChecklist
 //
 //  Created by Samuel Folledo on 3/21/18.
@@ -9,18 +9,18 @@
 import Foundation
 import UIKit
 
-protocol AddItemViewControllerDelegate: class { //p.231 created our own delegate protocol (contract between B and any screens who wish to use it), to transfer the message back to ChecklistViewController or ChecklistItem?
-    func addItemViewControllerDidCancel(_ controller: AddItemViewController)
-    func addItemViewController(_ controller: AddItemViewController, didFinishAdding item: ChecklistItem)
-    func addItemViewController(_ controller: AddItemViewController, didFinishEditing item: ChecklistItem) //p.248 for editingCells
+protocol ItemDetailViewControllerDelegate: class { //p.231 created our own delegate protocol (contract between B and any screens who wish to use it), to transfer the message back to ChecklistViewController or ChecklistItem?
+    func itemDetailViewControllerDidCancel(_ controller: ItemDetailViewController)
+    func itemDetailViewController(_ controller: ItemDetailViewController, didFinishAdding item: ChecklistItem)
+    func itemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ChecklistItem) //p.248 for editingCells
 }
 
-class AddItemViewController: UITableViewController, UITextFieldDelegate { //Made the AddItemViewController a delegate for the textField. Text field will send events to this delegate to let it know what is goin on. p.223... The AddItemViewController is already a delegate (and data source) for the UITableView (because it is a UITableViewController). now it is also become the delgate for the text field object, UITextField
+class ItemDetailViewController: UITableViewController, UITextFieldDelegate { //Made the ItemDetailViewController a delegate for the textField. Text field will send events to this delegate to let it know what is goin on. p.223... The ItemDetailViewController is already a delegate (and data source) for the UITableView (because it is a UITableViewController). now it is also become the delgate for the text field object, UITextField
     
     @IBOutlet weak var textField: UITextField! //p.219
     @IBOutlet weak var doneBarButton: UIBarButtonItem! //p.225
     
-    weak var delegate: AddItemViewControllerDelegate? //p.232
+    weak var delegate: ItemDetailViewControllerDelegate? //p.232
     var itemToEdit:ChecklistItem? //p.244 will contain the existing ChecklistITem
     
 //viewDidLoad
@@ -39,17 +39,17 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate { //Made
         //dismiss(animated: true, completion: nil) //p.210, removed on p.233
         if let item = itemToEdit { //p.249
             item.text = textField.text! //p.249
-            delegate?.addItemViewController(self, didFinishEditing: item) //p.249
+            delegate?.itemDetailViewController(self, didFinishEditing: item) //p.249
         } else { //p.249
             let item = ChecklistItem() //p.233
             item.text = textField.text! //p.233
             item.checked = false //p.233
-            delegate?.addItemViewController(self, didFinishAdding: item) //p.233
+            delegate?.itemDetailViewController(self, didFinishAdding: item) //p.233
         }
     }
 //cancel
     @IBAction func cancel() {
-        delegate?.addItemViewControllerDidCancel(self) //p.233
+        delegate?.itemDetailViewControllerDidCancel(self) //p.233
         //dismiss(animated: true, completion: nil) //dismiss(animated: Bool, completion: (()->Void)?) p.210 dismiss function returns the screen back to the previous screen. After VC disappears from the screen, its object is destroyed and the memory it was using reclaimed it around afterwards
     }
     
