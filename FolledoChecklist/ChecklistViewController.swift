@@ -10,20 +10,22 @@ import UIKit
 
 class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate { //p.235 ChecklistVC now promises to do the things from ItemDetailViewControllerDelegate protocol
 
-    
-    var items = [ChecklistItem]()//this declares that items will hold an array of ChecklistItem objects but it does not actually create that array. At this point, items does not have a value yet
-    //or var items: [ChecklistItem] = []
-    //items = [ChecklistItem]() //Swift 3's way to instantiates --------- This instantiates (create a representation)the array. Now items contains a valid array object, but the array has no ChecklistItem objects inside it yet until you append them
+    var items = [ChecklistItem]()
 
 //initializer
-    required init?(coder aDecoder: NSCoder) { //p.187 all variables should have a value, if you can't give it a value right away when declared, then you have to give it a value inside an initializer mothod
+    required init?(coder aDecoder: NSCoder) {
+        items = [ChecklistItem]() //p.270 first u make sure the instance var has a proper value (a new array)
+        super.init(coder: aDecoder) //p.270 then call super's version of init(), which is super.init(coder) to ensure the rest of teh VC is properly unfrozen from storyboard
+        loadChecklistItem() //p.270 finally call the method to do the real work for loading the plist file
+        
+/* REPLACED ON PAGE 269
         let row0item = ChecklistItem() //create a ChecklistItem object
-        row0item.text = "Brust your teeth" //this time the text and checked variables are not separate instance variables of the view controller but properties of ChecklistItem objects
+        row0item.text = "Brust your teeth"
         row0item.checked = false
         items.append(row0item)
         
         let row1item = ChecklistItem() //This instantiates a new ChecklistItem object, notice the ().
-        row1item.text = "Do your bed" //Give values to the data items inside the new ChecklistItem object
+        row1item.text = "Do your bed"
         row1item.checked = true
         items.append(row1item) //This adds the ChecklistItem object into the items array
         
@@ -44,6 +46,10 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         
         
         super.init(coder: aDecoder)
+        
+        print("Documents folder is \(documentsDirectory())") //p.257
+        print("Data file path is \(dataFilePath())") //p.257
+*/
     }
     
 //viewDidLoad
@@ -56,10 +62,9 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
     }
     
-//tableView's numberOfRowsInSection that returns the number of rows in a tableView
+//numberOfRowsInSection that returns the number of rows in a tableView
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         //return 5 //returns number of rows
@@ -72,68 +77,23 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         let item = items[indexPath.row] //p.190
         configureText(for: cell, with: item) //p.192 sets the checklist item's text on the cell's label
         configureCheckmark(for: cell, with: item)//p.193 instead of p.179's at: indexPath with with: item
-        
-/*      if indexPath.row == 0 { //p. 186
-            label.text = row0item.text
-        } else if indexPath.row == 1 { //modulo operator, a remainder operator, represented by %
-            label.text = row1item.text
-        } else if indexPath.row == 2 {
-            label.text = row2item.text
-        } else if indexPath.row == 3 {
-            label.text = row3item.text
-        } else if indexPath.row == 4 {
-            label.text = row4item.text
-        }
-*/
-        
-        //configureCheckmark(for: cell, at: indexPath) //p.179 Now let us add/remove checkmark. Initially, all rows r unchecked, and tapping it checks it. Rows and cells are now always in sync
-        
         return cell
     }
     
 //didSelectRowAt delegate for when rows are selected
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let cell = tableView.cellForRow(at: indexPath){//if let because it is possible that there is no cell at the specified index-path (if row row isnt visible). if let tells Swift to only perform the rest of the code if there really is a UITableViewCell object
-            
+        if let cell = tableView.cellForRow(at: indexPath){
             let item = items[indexPath.row] //p.190
             item.toggleChecked()
-            
-            
-/*          if cell.accessoryType == .none {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-            
-            if indexPath.row == 0 { //p.186
-                row0item.checked = !row0item.checked
-            } else if indexPath.row == 1 {
-                row1item.checked = !row1item.checked
-            } else if indexPath.row == 2 {
-                row2item.checked = !row2item.checked
-            } else if indexPath.row == 3 {
-                row3item.checked = !row3item.checked
-            } else if indexPath.row == 4 {
-                row4item.checked = !row4item.checked
-            }
-            //--------------------------------------
-            if isChecked { //this way, the logic that sets the checkmark on the cell has moved to the bottom of the method
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            } REPLACED BY the configureCheckmark
-*/
             configureCheckmark(for: cell, with: item)
         }
-        
         tableView.deselectRow(at: indexPath, animated: true)//deselect rows
-        
+        saveChecklistItems() //p.261 saveChecklistItems method when we toggle checkmark on or off
     }
     
 //configureCheckmark
     func configureCheckmark(for cell: UITableViewCell, with item: ChecklistItem) {// p.192
-        
         //p.242
         let label = cell.viewWithTag(1001) as! UILabel //p.242 check label's tag
         if item.checked {
@@ -141,37 +101,7 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         } else {
             label.text = ""
         }
-        
-    //func configureCheckmark(for cell: UITableViewCell, at indexPath: IndexPath) { //this method looks at the cell for a certain row, specified by indexPath, and makes the checkmark visible if the corresponding "row checked" variable is true, or hides the checkmark if the var is false
-        
-        //removed in page 242
-        /*Does not need "let item = items[indexPath.row]" as instead of indexPath, you now directly pass it the ChecklistItem object
-        if item.checked { //p/192
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }*/
-        
-/*      var isChecked = false
-        
-        if indexPath.row == 0 { //p.186
-            isChecked = row0item.checked
-        } else if indexPath.row == 1 {
-            isChecked = row1item.checked
-        } else if indexPath.row == 2 {
-            isChecked = row2item.checked
-        } else if indexPath.row == 3 {
-            isChecked = row3item.checked
-        } else if indexPath.row == 4 {
-            isChecked = row4item.checked
-        }
-        
-        if isChecked {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
-        }
-*/
+  
     }
   
 //configureText
@@ -197,11 +127,10 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
 
 //commitEditingStyle
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) { //p.202 that enables swipe-to-delete
-        
         items.remove(at: indexPath.row) //p.202 remove the item from the data model
-        
         let indexPaths = [indexPath] //p.202 delete the corresponding row from the table view
         tableView.deleteRows(at: indexPaths, with: .automatic) //deleteRows function
+        saveChecklistItems() //p.261 saveChecklistItems method when we swipe to delete
     }
     
 //cancel func protocol from delegate protocol, ItemDetailViewControllerDelegate p.235
@@ -217,8 +146,10 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
         let indexPath = IndexPath(row: newRowIndex, section: 0) //p.238
         let indexPaths = [indexPath] //p.238
         tableView.insertRows(at: indexPaths, with: .automatic) //p.238 (at: [IndexPath], with: UITableViewRowAnnimation)
-        
+
         dismiss(animated: true, completion: nil) //p.235
+        
+        saveChecklistItems() //p.261 saveChecklistItems method
     }//let me delete the older previous addItem function
 //func protocol for Editing p.250
     func itemDetailViewController(_ controller: ItemDetailViewController, didFinishEditing item: ChecklistItem) { //p.250
@@ -230,6 +161,7 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
             } //p.250
         } //p.250
         dismiss(animated: true, completion: nil) //p.250
+        saveChecklistItems() //p.261 saveChecklistItems method
     }
     
 //prepare-for-segue p.236
@@ -247,6 +179,35 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
             if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) { //p.246 
                 controller.itemToEdit = items[indexPath.row]
             }
+        }
+    } //end of prepare for segue
+    
+//documentsDirectory p.257
+    func documentsDirectory() -> URL { //p.257 no standar method you can call to get the full path to the Documents folder
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask) //p.257
+        return paths[0] //p.257
+    }
+//dataFilePath p.257
+    func dataFilePath() -> URL { //p.257 uses documentsDirectory() to construct the full path to the file that will store the checklist items. It is named Checklists.plist which lives inside the Documents directory
+        return documentsDirectory().appendingPathComponent ("Checklists.plist") //p.257
+    } //p.257
+    
+//saveChecklistItems p.260
+    func saveChecklistItems() { //p.261 this method takes the contents of the items array and in two steps converts it to a block of binary data and then writes this data to a file.
+        let data = NSMutableData() //p.260 A dynamic byte buffer that bridges to Data; use NSMutableData when you need reference semantics or other Foundation-specific behavior.
+        let archiver = NSKeyedArchiver(forWritingWith: data) //p.260 NSKeyedArchiver is a form of NSCoder that creates a plist files, encodes the array and all the ChecklistItems in it into some sort of binary data format that can be written to a file
+        archiver.encode(items, forKey: "ChecklistItems") //p.260 Encodes the object objv and associates it with the string key. Subclasses must override this method to identify multiple encodings of objv and encode a reference to objv instead. For example, NSKeyedArchiver detects duplicate objects and encodes a reference to the original object rather than encode the same object twice. //p.263 source of error
+        archiver.finishEncoding() //p.260 Instructs the receiver to construct the final data stream. No more values can be encoded after this method is called. You must call this method when finished.
+        data.write(to: dataFilePath(), atomically: true) //p.261 The data is placed in an NSMutableData object, which will write itself to the file specified by dataFilePath() 
+    }
+    
+    func loadChecklistItem() {
+        let path = dataFilePath() //1) p.270 put the results of dataFilePath in a temporary constant named path
+        if let data = try? Data(contentsOf: path) { //2) p.270 try to load the contents of Checklists.plist into a new Data object. The try? command attempts to create the Data object, but returns nil if it fails. Hence, why we used if let. It'll fail if these is no Checklists.plist then there is no ChecklistItem objects to laod, like when app is started for the very first time
+            let unarchiver = NSKeyedUnarchiver(forReadingWith: data) //3) p.270 When app does find a Checklist.plist file, you'll load the entire array and its contents from the file. Essentially the reverse of saveChecklistItems()
+            items = unarchiver.decodeObject(forKey: "ChecklistItems") as! [ChecklistItem]
+            
+            unarchiver.finishDecoding() //p.270 finish decoding
         }
     }
 
