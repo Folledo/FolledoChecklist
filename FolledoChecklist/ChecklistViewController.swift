@@ -11,6 +11,9 @@ import UIKit
 class ChecklistViewController: UITableViewController, ItemDetailViewControllerDelegate { //p.235 ChecklistVC now promises to do the things from ItemDetailViewControllerDelegate protocol
 
     var items = [ChecklistItem]()
+    
+    var checklist: Checklist! //p.284, an optional that must have a value //p.286 sequence of events is why checklist property is declared as Checklist!. This allows its value to be temporarily nil until viewDidLoad() happens, also you will not need if-let to unwrap it
+    
 
 //initializer
     required init?(coder aDecoder: NSCoder) {
@@ -55,7 +58,7 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
 //viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = checklist.name //p.284 changes the title of the screen. You'll give this Checklist object to the ChecklistViewController when segue is performed
         
     }
 
