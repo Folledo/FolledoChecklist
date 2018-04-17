@@ -13,9 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    let dataModel = DataModel() //p.312
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //p.313 this finds AllListsViewController by looking in the storyboard (as before) and then sets its dataModel property. Now All Lists screen can access the array of Checklist objects again
+        let navigationController = window!.rootViewController as! UINavigationController //p.313
+        let controller = navigationController.viewControllers[0] as! AllListsViewController //p.313
+        controller.dataModel = dataModel //p.313
+        
         return true
     }
 
@@ -31,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        saveData() //p.309
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -39,8 +47,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        saveData() //p.309
     }
 
+    func saveData() { //p.307 Having the saveData method here will let you save the data only if application terminates or enter the background
+        dataModel.saveChecklist()
+/* p.307 but simplified in p.312
+        let navigationController = window!.rootViewController as! UINavigationController
+        let controller = navigationController.viewControllers[0] as! AllListsViewController
+        controller.saveChecklist()
+ */
+    }
 
 }
 

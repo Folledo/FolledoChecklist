@@ -9,11 +9,15 @@
 import UIKit
 
 class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate { //p.292 Added ListDetailVCDelegate
+    var dataModel: DataModel!
+    //var lists = [Checklist]() //p.279 holds Checklist objects //p.311 removed the lists and put in DataModel.swift
     
-    var lists = [Checklist]() //p.279 holds Checklist objects
-    
-//init? (coder)
+/*//init? (coder) //removed in p.311
     required init?(coder aDecoder: NSCoder) {
+        lists = [Checklist]() //p.303
+        super.init(coder: aDecoder) //p.303
+        //loadChecklist() //p.303
+/* //entire init?(coder) is modified in p. 303
         lists = [Checklist]() //1 p.280 Give the lists variable a value. Can also be written as lists = Array<Checklist>()
         super.init(coder: aDecoder) //2 p.280 Call super's version of init?(coder). Without this, the new view controller wont be properly loaded from the storyboard. But dont worry too much about forgetting to call super; if you dont, Xcode gives an error message
         
@@ -35,8 +39,14 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         
         list = Checklist(name: "To Do")
         lists.append(list)
+        
+        for list in lists { //p.300 for every Checklist object in the list array, perform the statements that are in between the curly braces
+            let item = ChecklistItem()
+            item.text = "Item for \(list.name)"
+        }
+*/
     }
-    
+*/
     
     
     override func viewDidLoad() {
@@ -51,7 +61,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { //p.274
         
-        return lists.count
+        return dataModel.lists.count
     }
 
     
@@ -60,7 +70,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         let cell = makeCell(for: tableView) //p.275
         
         //cell.textLabel!.text = "list \(indexPath.row)" //p.275
-        let checklist = lists[indexPath.row] //p.282
+        let checklist = dataModel.lists[indexPath.row] //p.282
         cell.textLabel!.text = checklist.name //p.282
         cell.accessoryType = .detailDisclosureButton //p.282
         
@@ -78,7 +88,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
 //didSelectRowAt p.277
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let checklist = lists[indexPath.row] //p.284 this will be used to send along the Checklist object from the row that the user tapped on
+        let checklist = dataModel.lists[indexPath.row] //p.284 this will be used to send along the Checklist object from the row that the user tapped on
         performSegue(withIdentifier: "ShowChecklist", sender: checklist) //p.277 sender: nil until p.284
     }
     
@@ -100,8 +110,8 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         dismiss(animated: true, completion: nil)
     }
     func listDetailViewController(_ controller: ListDetailViewController, didFinishAdding checklist: Checklist) {
-        let newRowIndex = lists.count
-        lists.append(checklist)
+        let newRowIndex = dataModel.lists.count
+        dataModel.lists.append(checklist)
         
         let indexPath = IndexPath(row: newRowIndex, section: 0)
         let indexPaths = [indexPath]
@@ -110,7 +120,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         dismiss(animated: true, completion: nil)
     }
     func listDetailViewController(_ controller: ListDetailViewController, didFinishEditing checklist: Checklist) {
-        if let index = lists.index(of: checklist) {
+        if let index = dataModel.lists.index(of: checklist) {
             let indexPath = IndexPath(row: index, section: 0)
             if let cell = tableView.cellForRow(at: indexPath) {
                 cell.textLabel!.text = checklist.name
@@ -122,7 +132,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
 //p.293 swipe-to-delete method
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        lists.remove(at: indexPath.row)
+        dataModel.lists.remove(at: indexPath.row)
         
         let indexPaths = [indexPath]
         tableView.deleteRows(at: indexPaths, with: .automatic)
@@ -134,8 +144,44 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         let controller = navigationController.topViewController as! ListDetailViewController //p.294
         controller.delegate = self //p.294
         
-        let checklist = lists[indexPath.row] //p.294
+        let checklist = dataModel.lists[indexPath.row] //p.294
         controller.checklistToEdit = checklist //p.294
         present(navigationController, animated: true, completion: nil) //p.294
     }
+    
+/* //These 4 methods are now put into DataModel.swift
+// p.302 documentsDirectory(), dataFilePath(), saveChecklistItems(), loadChecklistItems() were moved from ChecklistViewController.swift from previous pages. Explanation for each lines are there
+//documentsDirectory //p.302
+    func documentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+//dataFilePath //p.302
+    func dataFilePath() -> URL { //p.302
+        return documentsDirectory().appendingPathComponent ("Checklists.plist")
+    }
+    
+//saveChecklistItems p.260 //p.302
+    func saveChecklist() {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: data)
+        
+        //archiver.encode(items, forKey: "ChecklistItems") //changed in p.302
+        archiver.encode(lists, forKey: "ChecklistItems") //p.302
+        archiver.finishEncoding()
+        data.write(to: dataFilePath(), atomically: true)
+    }
+//loadChecklistItem //p.302
+    func loadChecklist() {
+        let path = dataFilePath()
+        if let data = try? Data(contentsOf: path) {
+            let unarchiver = NSKeyedUnarchiver(forReadingWith: data)
+            
+            //items = unarchiver.decodeObject(forKey: "ChecklistItems") as! [ChecklistItem] //modified in p.302
+            lists = unarchiver.decodeObject(forKey: "ChecklistItems") as! [Checklist] //p.302 modified and changed the as! [ChecklistItem] to as! [Checklist]
+            unarchiver.finishDecoding()
+        }
+    }
+*/
+    
 }

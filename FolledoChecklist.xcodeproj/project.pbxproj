@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD009EBF2085765F00B4A92C /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD009EBE2085765F00B4A92C /* DataModel.swift */; };
 		CD015F8D20561E56000C424E /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD015F8C20561E56000C424E /* ChecklistItem.swift */; };
 		CD0365142062FFA300D02775 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0365132062FFA300D02775 /* ItemDetailViewController.swift */; };
 		CD6CCFBC203CC6C900DD9D4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CCFBB203CC6C900DD9D4B /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CD009EBE2085765F00B4A92C /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		CD015F8C20561E56000C424E /* ChecklistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
 		CD0365132062FFA300D02775 /* ItemDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 		CD6CCFB8203CC6C900DD9D4B /* FolledoChecklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FolledoChecklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,6 +66,7 @@
 		CD6CCFBA203CC6C900DD9D4B /* FolledoChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				CD009EBE2085765F00B4A92C /* DataModel.swift */,
 				CD6CCFBB203CC6C900DD9D4B /* AppDelegate.swift */,
 				CD6CCFBD203CC6C900DD9D4B /* ChecklistViewController.swift */,
 				CD015F8C20561E56000C424E /* ChecklistItem.swift */,
@@ -156,6 +159,7 @@
 				CD0365142062FFA300D02775 /* ItemDetailViewController.swift in Sources */,
 				CDD60BC72082BDFE00CD5C52 /* Checklist.swift in Sources */,
 				CD015F8D20561E56000C424E /* ChecklistItem.swift in Sources */,
+				CD009EBF2085765F00B4A92C /* DataModel.swift in Sources */,
 				CDD60BC52081D10900CD5C52 /* AllListsViewController.swift in Sources */,
 				CD6CCFBC203CC6C900DD9D4B /* AppDelegate.swift in Sources */,
 			);
