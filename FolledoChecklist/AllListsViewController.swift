@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate { //p.292 Added ListDetailVCDelegate
+class AllListsViewController: UITableViewController, ListDetailViewControllerDelegate, UINavigationControllerDelegate { //p.292 Added ListDetailVCDelegate //p.317 added UINavigationController delegate so navigation controller can tell you when it pushes or pops view controller on the navigation stack
     var dataModel: DataModel!
     //var lists = [Checklist]() //p.279 holds Checklist objects //p.311 removed the lists and put in DataModel.swift
     
@@ -88,6 +88,10 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     
 //didSelectRowAt p.277
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //UserDefaults.standard.set(indexPath.row, forKey: "ChecklistIndex") //p.316 In addition to what this method do before, you now store the index of the selected row into UserDefaults under the key "ChecklistIndex" //replaced in p.322
+        dataModel.indexOfSelectedChecklist = indexPath.row //p.322
+        
         let checklist = dataModel.lists[indexPath.row] //p.284 this will be used to send along the Checklist object from the row that the user tapped on
         performSegue(withIdentifier: "ShowChecklist", sender: checklist) //p.277 sender: nil until p.284
     }
@@ -184,4 +188,28 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
 */
     
+//willShow nsvigationController delegate method
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) { //p.317 Called just before the navigation controller displays a view controller’s view and navigation item properties
+        
+        if viewController === self { //p.317 3 equal signs, to determine whether the AllListViewController is the newly activated view controller. With == youre checking whether two variables have the same value. With === youre checking whether two variables refer to the exact same object
+            //UserDefaults.standard.set(-1, forKey: "ChecklistIndex") // p.317 this method is called whenever the navigation controller will slide to a new screen. If back button was pressed, the new view controller is AllListViewController itself and you set the "ChecklistIndex" value in UserDefaults to -1, meaning no checklist is currently selected. //p.322 replaced with indexOfSelectedChecklist
+            dataModel.indexOfSelectedChecklist = -1 //p.322 these changes are done in order for AllListViewController to not worry about the "how" storing values in UserDefaults, and simply focus on what changing the index of the selected checklist
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) { //p.318 UIKit automatically calls this method after the view controller has become visible
+        super.viewDidAppear(animated) //p.318
+        navigationController?.delegate = self //p.318 first makes itself the delegate. Every view controller has a built in navigationController property. To access it you use the notation navigationController?.delegate because it is optional. (! will crash the app if this view controller would ever be shown outside of a UINavigationController, while ? wont crash but simply ignore the rest of that line)
+        
+        //let index = UserDefaults.standard.integer(forKey: "ChecklistIndex") //p.318 then it checks UserDefaults to see whether it has to perform the segue //replaced in p.322
+        let index = dataModel.indexOfSelectedChecklist //p.322 to hide the calling of UserDefaults.standard.integer everytime
+        
+        //print("viewDidAppear index = \(index)")
+        //if index != -1 { //p.318 if index is -1 then the user was previously viewing a checklist //p.324 replaced for defensive programming
+        if index >= 0 && index < dataModel.lists.count { //p.324 instead of just checking for index != -1, you now do a more precise check to determine whether index is valid. It should be between 0 and a number of checklists in the data model. If not, then dont segue. In short, it prevents dataModel.lists[index] from asking for an object at an index that doesnt exist
+            let checklist = dataModel.lists[index] //p.318 if value of "ChecklistIndex" is not -1, then the user was previously viewing a checklist and the app should segue to that screen.
+            performSegue(withIdentifier: "ShowChecklist", sender: checklist) //p.318 and palce the relevant Checklist object into the sender parameter of performSegue(withIdentifier, sender)
+        }
+    }
+
 }

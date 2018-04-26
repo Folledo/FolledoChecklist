@@ -13,6 +13,8 @@ class DataModel { //p.310
     
     init() { //p.311
         loadChecklist() //p.311
+        registerDefaults() //p.321
+        handleFirstTime() //p.326
     }
     
 //documentsDirectory //p.311
@@ -46,5 +48,33 @@ class DataModel { //p.310
             unarchiver.finishDecoding()
         }
     }
+    
+    func registerDefaults() { //p.321
+        let dictionary: [String: Any] = ["ChecklistIndex": -1, "FirstTime": true] //p.321 creates a new dictionary and adds a value -1 for ChecklistIndex key //p.325 modified for when user run this for the first time
+        UserDefaults.standard.register(defaults: dictionary) //p.321 to prevent some errors, UserDefaults will use the values from this dictionary if you ask for a key but it cannot find anything under that key
+    }
+    
+    var indexOfSelectedChecklist: Int { //p.322 get{} set{} is an example of computed property
+        get { //p.322 when app tries to read the value of indexOfSelectedChecklist, code in get{} block is performed
+            return UserDefaults.standard.integer(forKey: "ChecklistIndex")
+        }
+        set {
+            UserDefaults.standard.integer(forKey: "ChecklistIndex") //p.322 when app tries to put a new value into indexOfSelectedChecklist, set block is performed
+        }
+    }
+    
+    func handleFirstTime() { //p.325
+        let userDefaults = UserDefaults.standard
+        let firstTime = userDefaults.bool(forKey: "FirstTime")
+        
+        if firstTime { //p.325 if firstTime is true then create and append a Checklist
+            let checklist = Checklist(name: "List")
+            lists.append(checklist)
+            
+            indexOfSelectedChecklist = 0
+            userDefaults.set(false, forKey: "FirstTime") //p.325 then after firstTime is called, set its value to false to never call it again
+            userDefaults.synchronize() //p.325
+        }
+    } //p.325
     
 }
