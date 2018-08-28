@@ -11,10 +11,28 @@ import Foundation
 class DataModel { //p.310
     var lists = [Checklist]()
     
+    var indexOfSelectedChecklist: Int { //p.322 get{} set{} is an example of computed property
+        get { //p.322 when app tries to read the value of indexOfSelectedChecklist, code in get{} block is performed
+            return UserDefaults.standard.integer(forKey: "ChecklistIndex")
+        }
+        set {
+            
+            UserDefaults.standard.integer(forKey: "ChecklistIndex") //p.322 when app tries to put a new value into indexOfSelectedChecklist, set block is performed
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
     init() { //p.311
         loadChecklist() //p.311
         registerDefaults() //p.321
         handleFirstTime() //p.326
+    }
+    
+//sortChecklists p.333
+    func sortChecklists() { //p.334
+        lists.sort(by: { checklist1, checklist2 in //p.334
+            return checklist1.name.localizedStandardCompare(checklist2.name) == .orderedAscending //p.334 this sort algorithm will repeatedly ask one Checklist object from the list how it compares to the other Checklist objects, and then suffles them around until the array is sorted. And allows sort() to sort the contents of the array in any order //localizedStandardCompare() compares the two name strings while ignoring lower/upper cases
+        })
     }
     
 //documentsDirectory //p.311
@@ -46,21 +64,15 @@ class DataModel { //p.310
             //items = unarchiver.decodeObject(forKey: "ChecklistItems") as! [ChecklistItem] //modified in p.302 //p.311
             lists = unarchiver.decodeObject(forKey: "ChecklistItems") as! [Checklist] //p.302 modified and changed the as! [ChecklistItem] to as! [Checklist] //p.311
             unarchiver.finishDecoding()
+            
+            sortChecklists() //p.334
         }
     }
     
     func registerDefaults() { //p.321
-        let dictionary: [String: Any] = ["ChecklistIndex": -1, "FirstTime": true] //p.321 creates a new dictionary and adds a value -1 for ChecklistIndex key //p.325 modified for when user run this for the first time
+        let dictionary: [String: Any] = ["ChecklistIndex": -1,
+                                         "FirstTime": true] //p.321 creates a new dictionary and adds a value -1 for ChecklistIndex key //p.325 modified for when user run this for the first time
         UserDefaults.standard.register(defaults: dictionary) //p.321 to prevent some errors, UserDefaults will use the values from this dictionary if you ask for a key but it cannot find anything under that key
-    }
-    
-    var indexOfSelectedChecklist: Int { //p.322 get{} set{} is an example of computed property
-        get { //p.322 when app tries to read the value of indexOfSelectedChecklist, code in get{} block is performed
-            return UserDefaults.standard.integer(forKey: "ChecklistIndex")
-        }
-        set {
-            UserDefaults.standard.integer(forKey: "ChecklistIndex") //p.322 when app tries to put a new value into indexOfSelectedChecklist, set block is performed
-        }
     }
     
     func handleFirstTime() { //p.325

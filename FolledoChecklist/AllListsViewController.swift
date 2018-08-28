@@ -53,6 +53,12 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         super.viewDidLoad()
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) { //p.330
+        super.viewWillAppear(animated) //p.330
+        
+        tableView.reloadData() //p.330
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -64,7 +70,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         return dataModel.lists.count
     }
 
-    
+//cellForRowAt
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell { //p.275
         //let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
         let cell = makeCell(for: tableView) //p.275
@@ -74,6 +80,15 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         cell.textLabel!.text = checklist.name //p.282
         cell.accessoryType = .detailDisclosureButton //p.282
         
+        //cell.detailTextLabel!.text = "\(checklist.countUncheckedItems()) Remaining" //p.328 detailTextLabel Returns the secondary label of the table cell if one exists. ! is necessary because textLabel and detailTextLabel are optionals
+    //cell.detailTextLabel!.text is updated in p.331
+        let count = checklist.countUncheckedItems() //p.331
+        if checklist.items.count == 0 { cell.detailTextLabel!.text = "(No Items)" }
+        else if count == 0 { cell.detailTextLabel!.text = "All Done!" } //p.331
+        else { cell.detailTextLabel!.text = "\(count) Remaining" } //p.331
+        
+        cell.imageView!.image = UIImage(named: checklist.iconName) //p.338 this will
+        
         return cell
     }
 //makeCell method p.275
@@ -82,7 +97,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
         if let cell = tableView.dequeueReusableCell (withIdentifier: cellIdentifier) { //the call dequeueReusableCell(withIdentifier) is still there, except that previously the storyboard had a prototype cell with that identifier and now it doesnt. If the table view cannot find a cell to re-use (it wont until it has enough cells to fill the entire visible area), this method will return nil, and you have to create your own by hand,thus what happens in the else section. p.283
             return cell
         } else {
-            return UITableViewCell(style: .default, reuseIdentifier: cellIdentifier) //
+            return UITableViewCell(style: .subtitle, reuseIdentifier: cellIdentifier) //p.327 chanced the UITableViewCell's style from .default to .subtitle
         }
     }
     
@@ -113,23 +128,28 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     func listDetailViewControllerDidCancel(_ controller: ListDetailViewController) {
         dismiss(animated: true, completion: nil)
     }
-    func listDetailViewController(_ controller: ListDetailViewController, didFinishAdding checklist: Checklist) {
-        let newRowIndex = dataModel.lists.count
+    func listDetailViewController(_ controller: ListDetailViewController,
+                                  didFinishAdding checklist: Checklist) {
+        //let newRowIndex = dataModel.lists.count //removed at p.333
+        //let indexPath = IndexPath(row: newRowIndex, section: 0) //removed at p.333
+        //let indexPaths = [indexPath] //removed at p.333
+        //tableView.insertRows(at: indexPaths, with: .automatic) //removed at p.333
+        
         dataModel.lists.append(checklist)
-        
-        let indexPath = IndexPath(row: newRowIndex, section: 0)
-        let indexPaths = [indexPath]
-        tableView.insertRows(at: indexPaths, with: .automatic)
-        
+        dataModel.sortChecklists() //added at p.333
+        tableView.reloadData() //added at p.333
         dismiss(animated: true, completion: nil)
     }
-    func listDetailViewController(_ controller: ListDetailViewController, didFinishEditing checklist: Checklist) {
-        if let index = dataModel.lists.index(of: checklist) {
-            let indexPath = IndexPath(row: index, section: 0)
-            if let cell = tableView.cellForRow(at: indexPath) {
-                cell.textLabel!.text = checklist.name
-            }
-        }
+    func listDetailViewController(_ controller: ListDetailViewController,
+                                  didFinishEditing checklist: Checklist) {
+//        if let index = dataModel.lists.index(of: checklist) { //removed at p.333
+//            let indexPath = IndexPath(row: index, section: 0) //removed at p.333
+//            if let cell = tableView.cellForRow(at: indexPath) { //removed at p.333
+//                cell.textLabel!.text = checklist.name //removed at p.333
+//            }
+//        }
+        dataModel.sortChecklists()
+        tableView.reloadData()
         dismiss(animated: true, completion: nil)
     }
 //end of delegate method p.293
@@ -188,7 +208,7 @@ class AllListsViewController: UITableViewController, ListDetailViewControllerDel
     }
 */
     
-//willShow nsvigationController delegate method
+//willShow navigationController delegate method
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) { //p.317 Called just before the navigation controller displays a view controller’s view and navigation item properties
         
         if viewController === self { //p.317 3 equal signs, to determine whether the AllListViewController is the newly activated view controller. With == youre checking whether two variables have the same value. With === youre checking whether two variables refer to the exact same object

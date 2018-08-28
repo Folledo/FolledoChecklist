@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CD009EBF2085765F00B4A92C /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD009EBE2085765F00B4A92C /* DataModel.swift */; };
 		CD015F8D20561E56000C424E /* ChecklistItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD015F8C20561E56000C424E /* ChecklistItem.swift */; };
+		CD01949E2134E18500A7F076 /* IconPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD01949D2134E18500A7F076 /* IconPickerViewController.swift */; };
 		CD0365142062FFA300D02775 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD0365132062FFA300D02775 /* ItemDetailViewController.swift */; };
 		CD6CCFBC203CC6C900DD9D4B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CCFBB203CC6C900DD9D4B /* AppDelegate.swift */; };
 		CD6CCFBE203CC6C900DD9D4B /* ChecklistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CCFBD203CC6C900DD9D4B /* ChecklistViewController.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		CD009EBE2085765F00B4A92C /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		CD015F8C20561E56000C424E /* ChecklistItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItem.swift; sourceTree = "<group>"; };
+		CD01949D2134E18500A7F076 /* IconPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerViewController.swift; sourceTree = "<group>"; };
 		CD0365132062FFA300D02775 /* ItemDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 		CD6CCFB8203CC6C900DD9D4B /* FolledoChecklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FolledoChecklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD6CCFBB203CC6C900DD9D4B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				CDD60BC42081D10900CD5C52 /* AllListsViewController.swift */,
 				CDD60BC62082BDFE00CD5C52 /* Checklist.swift */,
 				CDD60BC8208301E500CD5C52 /* ListDetailViewController.swift */,
+				CD01949D2134E18500A7F076 /* IconPickerViewController.swift */,
 				CD6CCFC2203CC6C900DD9D4B /* Assets.xcassets */,
 				CD6CCFC4203CC6C900DD9D4B /* LaunchScreen.storyboard */,
 				CD6CCFC7203CC6C900DD9D4B /* Info.plist */,
@@ -157,6 +160,7 @@
 				CD6CCFBE203CC6C900DD9D4B /* ChecklistViewController.swift in Sources */,
 				CDD60BC9208301E500CD5C52 /* ListDetailViewController.swift in Sources */,
 				CD0365142062FFA300D02775 /* ItemDetailViewController.swift in Sources */,
+				CD01949E2134E18500A7F076 /* IconPickerViewController.swift in Sources */,
 				CDD60BC72082BDFE00CD5C52 /* Checklist.swift in Sources */,
 				CD015F8D20561E56000C424E /* ChecklistItem.swift in Sources */,
 				CD009EBF2085765F00B4A92C /* DataModel.swift in Sources */,
