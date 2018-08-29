@@ -71,7 +71,8 @@ class DataModel { //p.310
     
     func registerDefaults() { //p.321
         let dictionary: [String: Any] = ["ChecklistIndex": -1,
-                                         "FirstTime": true] //p.321 creates a new dictionary and adds a value -1 for ChecklistIndex key //p.325 modified for when user run this for the first time
+                                         "FirstTime": true,
+                                         "ChecklistItemID": 0] //p.321 creates a new dictionary and adds a value -1 for ChecklistIndex key //p.325 modified for when user run this for the first time //p.363 added ChecklistItemID: 0, which is 0 first then increment by 1
         UserDefaults.standard.register(defaults: dictionary) //p.321 to prevent some errors, UserDefaults will use the values from this dictionary if you ask for a key but it cannot find anything under that key
     }
     
@@ -88,5 +89,14 @@ class DataModel { //p.310
             userDefaults.synchronize() //p.325
         }
     } //p.325
+    
+//p.364 class methods vs instance methods. A method starting with a class func allow syou to call methods on an object even when you dont have a reference to that object
+    class func nextChecklistItemID() -> Int { //p.363 this method gets the current "ChecklistItemID" value from USerDegaults, adds 1 to it, and writes it back to UserDefaults. It returns the previous value to the caller
+        let userDefaults = UserDefaults.standard //p.363
+        let itemID = userDefaults.integer(forKey: "ChecklistItemID") //p.363
+        userDefaults.set(itemID + 1, forKey: "ChecklistItemID") //p.363 this increments the ChecklistItemID's itemID by 1, which is important because u dont want two or more ChecklistItems to get the same ID
+        userDefaults.synchronize() //p.363 //this method also does userDefaults.synchronize() to force UserDefaults to write these changes to disk immediately, so they wont get lost if you kill the app from Xcode before it had a chance to save
+        return itemID //p.363
+    }
     
 }

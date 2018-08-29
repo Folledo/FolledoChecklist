@@ -15,7 +15,6 @@
 		CD6CCFBE203CC6C900DD9D4B /* ChecklistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6CCFBD203CC6C900DD9D4B /* ChecklistViewController.swift */; };
 		CD6CCFC1203CC6C900DD9D4B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD6CCFBF203CC6C900DD9D4B /* Main.storyboard */; };
 		CD6CCFC3203CC6C900DD9D4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD6CCFC2203CC6C900DD9D4B /* Assets.xcassets */; };
-		CD6CCFC6203CC6C900DD9D4B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD6CCFC4203CC6C900DD9D4B /* LaunchScreen.storyboard */; };
 		CDD60BC52081D10900CD5C52 /* AllListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD60BC42081D10900CD5C52 /* AllListsViewController.swift */; };
 		CDD60BC72082BDFE00CD5C52 /* Checklist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD60BC62082BDFE00CD5C52 /* Checklist.swift */; };
 		CDD60BC9208301E500CD5C52 /* ListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD60BC8208301E500CD5C52 /* ListDetailViewController.swift */; };
@@ -31,7 +30,6 @@
 		CD6CCFBD203CC6C900DD9D4B /* ChecklistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistViewController.swift; sourceTree = "<group>"; };
 		CD6CCFC0203CC6C900DD9D4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CD6CCFC2203CC6C900DD9D4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CD6CCFC5203CC6C900DD9D4B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD6CCFC7203CC6C900DD9D4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CDD60BC42081D10900CD5C52 /* AllListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllListsViewController.swift; sourceTree = "<group>"; };
 		CDD60BC62082BDFE00CD5C52 /* Checklist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checklist.swift; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 				CDD60BC8208301E500CD5C52 /* ListDetailViewController.swift */,
 				CD01949D2134E18500A7F076 /* IconPickerViewController.swift */,
 				CD6CCFC2203CC6C900DD9D4B /* Assets.xcassets */,
-				CD6CCFC4203CC6C900DD9D4B /* LaunchScreen.storyboard */,
 				CD6CCFC7203CC6C900DD9D4B /* Info.plist */,
 			);
 			path = FolledoChecklist;
@@ -112,7 +109,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Samuel Folledo";
 				TargetAttributes = {
 					CD6CCFB7203CC6C900DD9D4B = {
@@ -144,7 +141,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD6CCFC6203CC6C900DD9D4B /* LaunchScreen.storyboard in Resources */,
 				CD6CCFC3203CC6C900DD9D4B /* Assets.xcassets in Resources */,
 				CD6CCFC1203CC6C900DD9D4B /* Main.storyboard in Resources */,
 			);
@@ -180,14 +176,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		CD6CCFC4203CC6C900DD9D4B /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CD6CCFC5203CC6C900DD9D4B /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -205,6 +193,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -212,6 +201,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -262,6 +252,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -269,6 +260,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
