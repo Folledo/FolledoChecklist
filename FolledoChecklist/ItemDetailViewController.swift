@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 protocol ItemDetailViewControllerDelegate: class { //p.231 created our own delegate protocol (contract between B and any screens who wish to use it), to transfer the message back to ChecklistViewController or ChecklistItem?
     func itemDetailViewControllerDidCancel(_ controller: ItemDetailViewController)
@@ -84,6 +85,8 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate { //M
             item.text = textField.text! //p.249
             item.shouldRemind = shouldRemindSwitch.isOn //p.368 //here you put the value of the switch control and the dueDate instance variable back into the ChecklistItem object when the user presses the Done button
             item.dueDate = dueDate //p.368
+            
+            item.scheduleNotification() //p.377
             
             delegate?.itemDetailViewController(self, didFinishEditing: item) //p.249
         } else { //p.249
@@ -202,5 +205,17 @@ class ItemDetailViewController: UITableViewController, UITextFieldDelegate { //M
 //textFieldDidBeginEditing() p.376
     func textFieldDidBeginEditing(_ textField: UITextField) { //p.376 to hide datePicker when textfield is tapped
         hideDatePicker() //p.376
+    }
+    
+//shouldRemindToggled method p.379
+    @IBAction func shouldRemindToggled(_ switchControl: UISwitch) { //p.379 this only prompts user to allow access to send notification when the switch is toggled, instead of everytime the app initially begins
+        textField.resignFirstResponder() //p.379
+        
+        if switchControl.isOn { //p.379
+            let center = UNUserNotificationCenter.current() //p.379
+            center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in //p.379
+                /* Do nothing */
+            }
+        }
     }
 }

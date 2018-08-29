@@ -114,8 +114,8 @@ class ChecklistViewController: UITableViewController, ItemDetailViewControllerDe
 //configureText
     func configureText(for cell: UITableViewCell, with item: ChecklistItem) {//p.192 sets the checklist item's text on the cell's label
         let label = cell.viewWithTag(1000) as! UILabel
-//        label.text = item.text
-        label.text = "+++\(item.itemID): \(item.text)+++" //p.365 this shows that a new itemID is produced everytime a checklistItem is added on any checklist
+        label.text = item.text
+//        label.text = "+++\(item.itemID): \(item.text)+++" //p.365 this shows that a new itemID is produced everytime a checklistItem is added on any checklist
     }
     
 /* addItem gets removed after p.238 when we created a delegate protocol that lets us customize what we add
